@@ -11,8 +11,7 @@ from threading import Thread
 # import logging
 # logging.basicConfig(level=logging.DEBUG, format="%(message)s")
 
-PORT = 8888
-BASE_URL = "http://209.97.153.158:" + str(PORT)
+BASE_URL = "https://lamp-lamp.herokuapp.com"
 POLLING_DELAY = 1
 
 def check_server_lamp(request_session) -> bool:
