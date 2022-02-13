@@ -81,6 +81,15 @@ class Lamp:
         # self._server_thread.join()
         pass
 
+    def set_color(self, hex):
+        c = hex.strip('#')
+        newColor = tuple(int(c[i:i+2], 16) for i in (0, 2, 4))
+        if newColor != self._color:
+            self._color = newColor
+            turn_on_lamp(self._pixels, self._color)
+        
+            
+
     def check_server(self):
         with requests.Session() as s:
             while True:
@@ -91,7 +100,7 @@ class Lamp:
                     #     continue
                     server_lamp_status = check_server_lamp(s)
                     server_lamp_on = server_lamp_status[LAMP_ON_KEY]
-                    self._color = server_lamp_status[COLOR_KEY]
+                    self.set_color(server_lamp_status[COLOR_KEY])
                     print('server says: ' + str(server_lamp_on))
                     if server_lamp_on != self._lamp_on:
                         self._lamp_on = server_lamp_on
