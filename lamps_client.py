@@ -18,7 +18,6 @@ id = 'amanda'
 LAMP_ON_KEY = "lamp_on"
 COLOR_KEY = 'color'
 
-
 def check_server_lamp(request_session) -> bool:
     api_url = BASE_URL + "/lamp"
     print(api_url)
@@ -86,7 +85,8 @@ class Lamp:
         newColor = tuple(int(c[i:i+2], 16) for i in (0, 2, 4))
         if newColor != self._color:
             self._color = newColor
-            turn_on_lamp(self._pixels, self._color)
+            if self._lamp_on:
+                turn_on_lamp(self._pixels, self._color)
         
             
 
