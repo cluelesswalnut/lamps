@@ -11,14 +11,18 @@ from threading import Thread
 # import logging
 # logging.basicConfig(level=logging.DEBUG, format="%(message)s")
 
-PORT = 8888
-BASE_URL = "http://209.97.153.158:" + str(PORT)
+BASE_URL = "https://lamp-lamp.herokuapp.com"
 POLLING_DELAY = 1
+id = 'amanda'
+# id = 'markus'
+LAMP_ON_KEY = "lamp_on"
+COLOR_KEY = 'color'
 
 def check_server_lamp(request_session) -> bool:
     api_url = BASE_URL + "/lamp"
     print(api_url)
-    response = request_session.get(api_url, timeout = 5)
+    param = {'id': id}
+    response = request_session.get(api_url, params = param, timeout = 5)
     # print(response.json())
     # print(response.status_code)
     lamp_status = response.json()
@@ -76,6 +80,16 @@ class Lamp:
         # self._server_thread.join()
         pass
 
+    def set_color(self, hex):
+        c = hex.strip('#')
+        newColor = tuple(int(c[i:i+2], 16) for i in (0, 2, 4))
+        if newColor != self._color:
+            self._color = newColor
+            if self._lamp_on:
+                turn_on_lamp(self._pixels, self._color)
+        
+            
+
     def check_server(self):
         with requests.Session() as s:
             while True:
@@ -84,7 +98,9 @@ class Lamp:
                     # if datetime.datetime.now() < self._check_server_after:
                     #     time.sleep(POLLING_DELAY)
                     #     continue
-                    server_lamp_on = check_server_lamp(s)
+                    server_lamp_status = check_server_lamp(s)
+                    server_lamp_on = server_lamp_status[LAMP_ON_KEY]
+                    self.set_color(server_lamp_status[COLOR_KEY])
                     print('server says: ' + str(server_lamp_on))
                     if server_lamp_on != self._lamp_on:
                         self._lamp_on = server_lamp_on
