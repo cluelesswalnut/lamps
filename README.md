@@ -6,3 +6,7 @@ The friendship lamps use a Raspberry PI connected to LEDs for light and changing
 The lamps have a touch sensor used to turn the lamps on. The color can only be changed from a separate mobile app.
 
 Currently the server is running on a Heroku instance.
+
+# Demo
+
+![Demo](images/lamps.gif)
