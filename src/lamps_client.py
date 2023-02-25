@@ -81,7 +81,7 @@ class FriendshipLamp:
         os.path.join(os.getcwd(), os.path.dirname(__file__)))
         with open(os.path.join(__location__, 'config.json'), 'r') as f:
             data = json.load(f)
-        color = data['color']
+        color = data[COLOR_KEY]
         self._color = tuple(map(int, color.split(',')))
         self._server_thread = Thread(target = self.check_server)
         self._server_thread.daemon = True
@@ -149,19 +149,20 @@ class FriendshipLamp:
             try:
                 if GPIO.input(21) == True:
                     if self._lamp_on:
-                        send_lamp_off()
-                        self._lamp_on = False
                         turn_off_lamp(self._pixels)
+                        self._lamp_on = False
+                        send_lamp_off()
                     elif not self._lamp_on:
-                        send_lamp_on()
-                        self._lamp_on = True
                         turn_on_lamp(self._pixels, self._color)
+                        self._lamp_on = True
+                        send_lamp_on()
                     # sleep so the lamp doesn't flicker back and forth while the touch
                     # sensor touched for more than a split second
                     time.sleep(0.5)
             except Exception as e:
                 print('error on button press')
                 print(e)
+                time.sleep(0.5)
 
 if __name__ == '__main__':
     with FriendshipLamp() as lamp:
