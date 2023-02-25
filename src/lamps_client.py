@@ -9,7 +9,7 @@ import time
 from threading import Thread
 
 
-BASE_URL = "https://lamp-lamp.herokuapp.com"
+BASE_URL = "http://<server ip>:3000"
 POLLING_DELAY = 1
 # Update the ID depending on which client the code is being deployed on
 ID = 'amanda'
